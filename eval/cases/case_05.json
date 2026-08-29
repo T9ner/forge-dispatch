@@ -1,0 +1,46 @@
+{
+  "id": "case_05",
+  "description": "Medium: A ticket is marked Done but related GitHub issues are still open — requires cross-referencing by title similarity.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 78,
+          "title": "Billing module rewrite",
+          "body": "Closes LIN-34.",
+          "merged_at": "2026-08-23T13:00:00Z"
+        }
+      ],
+      "open_issues": [
+        {
+          "number": 92,
+          "title": "Bug: billing module crashes on nil invoice",
+          "labels": ["bug", "billing"]
+        },
+        {
+          "number": 93,
+          "title": "Bug: duplicate charges on retry",
+          "labels": ["bug", "billing", "critical"]
+        }
+      ]
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-34",
+          "title": "Billing module rewrite",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-23T14:00:00Z",
+          "labels": {"nodes": [{"name": "feature"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "LIN-34 (Billing module rewrite) is marked Done but GitHub has 2 open bug issues against the billing module (issues #92, #93).",
+      "systems": ["github", "linear"]
+    }
+  ]
+}

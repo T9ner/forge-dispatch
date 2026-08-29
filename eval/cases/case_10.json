@@ -1,0 +1,46 @@
+{
+  "id": "case_10",
+  "description": "Hard: Three-way gap — PR merged, ticket closed, but a new critical bug was opened the same day suggesting a regression. The baseline is expected to miss this.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 400,
+          "title": "Migrate to new payment provider",
+          "body": "Closes LIN-300. Migrates from Stripe to our custom gateway.",
+          "merged_at": "2026-08-27T09:00:00Z"
+        }
+      ],
+      "open_issues": [
+        {
+          "number": 410,
+          "title": "CRITICAL: Payments failing for EU users after gateway migration",
+          "labels": ["bug", "critical", "payments"]
+        },
+        {
+          "number": 411,
+          "title": "Payment receipts not being emailed after migration",
+          "labels": ["bug", "payments"]
+        }
+      ]
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-300",
+          "title": "Migrate to new payment provider",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-27T10:00:00Z",
+          "labels": {"nodes": [{"name": "feature"}, {"name": "payments"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "LIN-300 (payment gateway migration) is marked Done and PR #400 is merged, but 2 critical payment bugs were opened on the same day (GitHub issues #410, #411), indicating a regression from this change.",
+      "systems": ["github", "linear"]
+    }
+  ]
+}

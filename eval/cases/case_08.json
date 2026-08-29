@@ -1,0 +1,66 @@
+{
+  "id": "case_08",
+  "description": "Hard: Two independent gaps requiring multi-hop reasoning across both Systems.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 200,
+          "title": "Dark mode toggle",
+          "body": "Closes LIN-150.",
+          "merged_at": "2026-08-24T08:00:00Z"
+        },
+        {
+          "number": 201,
+          "title": "Rate limiting middleware",
+          "body": "See LIN-160 for context.",
+          "merged_at": "2026-08-25T14:00:00Z"
+        }
+      ],
+      "open_issues": [
+        {
+          "number": 210,
+          "title": "Bug: dark mode flickers on page load",
+          "labels": ["bug", "ui"]
+        }
+      ]
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-150",
+          "title": "Dark mode toggle",
+          "state": {"name": "In Progress"},
+          "updatedAt": "2026-08-20T08:00:00Z",
+          "labels": {"nodes": [{"name": "feature"}]}
+        },
+        {
+          "id": "LIN-160",
+          "title": "Rate limiting",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-25T15:00:00Z",
+          "labels": {"nodes": [{"name": "backend"}]}
+        },
+        {
+          "id": "LIN-170",
+          "title": "Onboarding flow redesign",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-18T09:00:00Z",
+          "labels": {"nodes": [{"name": "design"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #200 merged for 'Dark mode toggle' (Closes LIN-150) but LIN-150 is still 'In Progress'.",
+      "systems": ["github", "linear"]
+    },
+    {
+      "id": "gap_2",
+      "description": "LIN-150 (Dark mode) is marked as In Progress, but GitHub issue #210 reports a bug against dark mode, suggesting the feature was shipped with known issues.",
+      "systems": ["github", "linear"]
+    }
+  ]
+}

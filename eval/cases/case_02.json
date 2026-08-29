@@ -1,0 +1,28 @@
+{
+  "id": "case_02",
+  "description": "Easy: A Linear ticket is marked 'Done' but its PR was never merged.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [],
+      "open_issues": []
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-88",
+          "title": "Implement CSV export",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-22T14:00:00Z",
+          "labels": {"nodes": [{"name": "feature"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "LIN-88 is marked Done in Linear but no merged PR exists for it in GitHub.",
+      "systems": ["github", "linear"]
+    }
+  ]
+}

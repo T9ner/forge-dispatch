@@ -1,0 +1,36 @@
+{
+  "id": "case_07",
+  "description": "Medium: No gaps, but there is a Done ticket with no PR — because it was intentionally resolved without code (e.g., documentation task).",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 60,
+          "title": "Fix search ranking bug",
+          "body": "Fixes LIN-20.",
+          "merged_at": "2026-08-21T10:00:00Z"
+        }
+      ],
+      "open_issues": []
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-20",
+          "title": "Fix search ranking bug",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-21T11:00:00Z",
+          "labels": {"nodes": [{"name": "bug"}]}
+        },
+        {
+          "id": "LIN-21",
+          "title": "Update API documentation",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-21T15:00:00Z",
+          "labels": {"nodes": [{"name": "docs"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": []
+}

@@ -1,0 +1,42 @@
+{
+  "id": "case_09",
+  "description": "Hard: A critical bug ticket is open in Linear but no PR or issue exists in GitHub — the problem is invisible on the GitHub side.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 300,
+          "title": "Improve test coverage",
+          "body": "Closes LIN-200.",
+          "merged_at": "2026-08-26T10:00:00Z"
+        }
+      ],
+      "open_issues": []
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-200",
+          "title": "Improve test coverage",
+          "state": {"name": "Done"},
+          "updatedAt": "2026-08-26T11:00:00Z",
+          "labels": {"nodes": [{"name": "testing"}]}
+        },
+        {
+          "id": "LIN-205",
+          "title": "CRITICAL: Data loss on concurrent writes",
+          "state": {"name": "In Progress"},
+          "updatedAt": "2026-08-15T08:00:00Z",
+          "labels": {"nodes": [{"name": "critical"}, {"name": "bug"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "LIN-205 is a critical bug ticket 'In Progress' in Linear but has no corresponding PR or GitHub issue — it has been stale since Aug 15 with no visible GitHub activity.",
+      "systems": ["linear"]
+    }
+  ]
+}

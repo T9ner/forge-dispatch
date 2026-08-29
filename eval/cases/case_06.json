@@ -1,0 +1,41 @@
+{
+  "id": "case_06",
+  "description": "Medium: Two PRs reference the same ticket, which is still open. Gap exists but requires de-duplication.",
+  "mock_responses": {
+    "github": {
+      "merged_prs": [
+        {
+          "number": 101,
+          "title": "Notifications: email templates",
+          "body": "Part 1 of LIN-77.",
+          "merged_at": "2026-08-20T09:00:00Z"
+        },
+        {
+          "number": 104,
+          "title": "Notifications: push support",
+          "body": "Part 2 of LIN-77. Completes the feature.",
+          "merged_at": "2026-08-22T11:00:00Z"
+        }
+      ],
+      "open_issues": []
+    },
+    "linear": {
+      "tickets": [
+        {
+          "id": "LIN-77",
+          "title": "Notifications system",
+          "state": {"name": "In Progress"},
+          "updatedAt": "2026-08-18T10:00:00Z",
+          "labels": {"nodes": [{"name": "feature"}]}
+        }
+      ]
+    }
+  },
+  "ground_truth_gaps": [
+    {
+      "id": "gap_1",
+      "description": "Two PRs (#101 and #104) reference LIN-77 as complete, but LIN-77 is still 'In Progress' in Linear.",
+      "systems": ["github", "linear"]
+    }
+  ]
+}
