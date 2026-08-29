@@ -11,9 +11,8 @@ Public interface:
 """
 
 import json
-import os
 
-from openai import OpenAI
+from agents.llm import get_client, get_model
 
 
 SYSTEM_PROMPT = """You are Forge's reporting engine.
@@ -61,7 +60,7 @@ def run(context: dict) -> dict:
         {"brief": "<plain-text Brief>"}
     """
     gaps = context["gaps"]
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    client = get_client()
 
     from datetime import date
     today = date.today().strftime("%B %d, %Y")
@@ -69,7 +68,7 @@ def run(context: dict) -> dict:
     prompt = SYSTEM_PROMPT.replace("{today}", today).replace("{n}", str(len(gaps)))
 
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=get_model(),
         messages=[
             {"role": "system", "content": prompt},
             {

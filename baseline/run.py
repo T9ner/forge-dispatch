@@ -8,11 +8,15 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
+from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import OpenAI
+
+# Ensure agents/ is importable for llm.py
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from agents.llm import get_client, get_model
 
 load_dotenv()
 
@@ -50,11 +54,11 @@ def run_baseline(case_path: str) -> dict:
     with open(case_path) as f:
         case = json.load(f)
 
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    client = get_client()
     context = build_context(case)
 
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=get_model(),
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": context},

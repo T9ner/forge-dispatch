@@ -11,9 +11,8 @@ Public interface:
 """
 
 import json
-import os
 
-from openai import OpenAI
+from agents.llm import get_client, get_model
 
 
 SYSTEM_PROMPT = """You are Forge's reasoning engine.
@@ -68,12 +67,12 @@ def run(context: dict) -> dict:
         {"gaps": [...]}
     """
     signals = context["signals"]
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    client = get_client()
 
     payload = json.dumps(signals, indent=2)
 
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=get_model(),
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"Here are the Signals:\n\n{payload}"},

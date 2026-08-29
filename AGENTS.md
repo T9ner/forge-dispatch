@@ -6,7 +6,8 @@
 ## Repository-Wide Contracts
 
 - **Language**: All code is Python 3.11+. No JavaScript/TypeScript.
-- **LLM calls**: Use the `openai` SDK pointing at `OPENAI_API_KEY`. Model: `gpt-4o` unless a module-level AGENTS.md overrides it.
+- **LLM calls**: Use `agents/llm.py` — `get_client()` returns an OpenRouter-backed OpenAI client, `get_model()` returns the value of `FORGE_MODEL` env var. Never instantiate `OpenAI()` directly in agent files.
+- **Model selection**: Set `FORGE_MODEL` in `.env`. Supported free models: `nvidia/nemotron-3-super-120b-a12b:free` (default), `thinkingmachines/inkling:free`, `minimax/minimax-m2.7:free`.
 - **Env vars**: Never hardcode secrets. All credentials come from `.env` (loaded via `python-dotenv`). See `.env.example` for required vars.
 - **Output format**: All agent outputs are plain Python dicts. No raw string parsing between agents — pass structured data.
 - **Error handling**: Agents must never crash silently. On tool call failure, raise with a descriptive message that names the System that failed.
