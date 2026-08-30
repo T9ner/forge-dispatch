@@ -19,29 +19,34 @@ Each missed gap is a compounding cost — delayed decisions, surprise regression
 
 ## The Forge Solution
 
-Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on Forge's architecture. Three Agents collaborate to deliver a weekly intelligence Brief without human assembly:
+Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Three Agents collaborate as nodes in a state graph to deliver a weekly intelligence Brief without human assembly:
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Forge Dispatch Pipeline               │
-│                                                         │
-│  ┌──────────────┐  Signals  ┌──────────────┐  Gaps     │
-│  │   Sensing    │ ────────► │  Reasoning   │ ────────► │
-│  │    Agent     │           │    Agent     │           │
-│  └──────────────┘           └──────────────┘           │
-│    GitHub + Linear                Cross-ref             │
-│    raw Signal pull             Gap detection            │
-│                                                         │
-│                               ┌──────────────┐          │
-│                               │  Reporting   │          │
-│                               │    Agent     │          │
-│                               └──────────────┘          │
-│                               Plain-language Brief       │
-│                               + human checkpoint         │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│              Forge Dispatch Pipeline (LangGraph)             │
+│                                                              │
+│  ┌────────┐       ┌─────────┐       ┌──────────┐            │
+│  │ SENSE  │──────▶│ DECIDE  │──────▶│  REPORT  │            │
+│  │ node   │       │  node   │ gaps? │   node   │            │
+│  └────────┘       └─────────┘  yes  └──────────┘            │
+│   GitHub +             │                  │                  │
+│   Linear API           │ no gaps          ▼                  │
+│                        │            ┌──────────┐             │
+│                        │            │ APPROVE  │             │
+│                        │            │  node    │             │
+│                        │            └──────────┘             │
+│                        │              human ✓│               │
+│                        ▼                     ▼               │
+│                   ┌────────┐           ┌────────┐            │
+│                   │  SAVE  │           │  SAVE  │            │
+│                   │  node  │           │  node  │            │
+│                   └────────┘           └────────┘            │
+│                       ▼                    ▼                 │
+│                      END                  END                │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**Systems connected (this submission):** GitHub + Linear (via their public APIs, synthetic data)
+**State flows as a typed dict** through every node. Each node reads only what it needs and writes its output field. The conditional edge after DECIDE skips reporting entirely when no gaps are found.
 
 ---
 
