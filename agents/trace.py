@@ -41,14 +41,14 @@ def _trace_input(case: dict, mock: bool, auto_approve: bool) -> dict:
 
 def pipeline_composition(case_id: str, mock: bool, auto_approve: bool) -> dict:
     """Composition manifest — pins the runtime tuple for reproducibility."""
-    from agents.llm import get_model
+    from agents.llm import get_model, get_provider
 
     return {
         "pipeline": "forge-dispatch",
         "runner": "langgraph",
         "graph": GRAPH_TOPOLOGY,
         "model": get_model(),
-        "provider": "openrouter",
+        "provider": get_provider(),
         "checkpoint": "MemorySaver",
         "thread_id": f"forge-{case_id}",
         "mock": mock,
@@ -57,13 +57,13 @@ def pipeline_composition(case_id: str, mock: bool, auto_approve: bool) -> dict:
 
 
 def baseline_composition(case_id: str) -> dict:
-    from agents.llm import get_model
+    from agents.llm import get_model, get_provider
 
     return {
         "pipeline": "forge-dispatch-baseline",
         "runner": "single-shot",
         "model": get_model(),
-        "provider": "openrouter",
+        "provider": get_provider(),
         "case_id": case_id,
     }
 

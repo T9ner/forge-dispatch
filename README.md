@@ -127,7 +127,11 @@ Because every new tool integration is simply a connector returning structured di
 ### Prerequisites
 
 - Python 3.11+
-- `OPENROUTER_API_KEY` (Free model access via OpenRouter)
+- At least one LLM credential:
+  - `OPENROUTER_API_KEY` (Free open-source models via OpenRouter), OR
+  - `OPENAI_API_KEY` (Official OpenAI GPT-4o / GPT-4o-mini), OR
+  - `ANTHROPIC_API_KEY` (Official Anthropic Claude 3.5 / 3.7 Sonnet), OR
+  - `OPENAI_BASE_URL` (Any OpenAI-compatible endpoint such as Ollama, vLLM, Groq, Together AI)
 - `GITHUB_TOKEN` (Read-only, required only for live API mode)
 - `LINEAR_API_KEY` (Read-only, required only for live API mode)
 
@@ -138,7 +142,7 @@ git clone https://github.com/T9ner/forge-dispatch
 cd forge-dispatch
 pip install -r requirements.txt
 cp .env.example .env
-# Add your OPENROUTER_API_KEY to .env
+# Configure your preferred LLM API key in .env
 ```
 
 ### Run the baseline

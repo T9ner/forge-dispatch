@@ -1,21 +1,21 @@
 """
-Shared LLM client — OpenRouter with configurable model.
+Shared LLM client factory supporting multi-provider configuration.
 
-All agents import get_client() and get_model() from here.
-Model is set via the FORGE_MODEL env var. Defaults to Nemotron 3 Super.
+Supported providers:
+1. OpenRouter (OPENROUTER_API_KEY) — access to open-source and commercial models.
+2. OpenAI (OPENAI_API_KEY) — official OpenAI endpoints (e.g. gpt-4o, gpt-4o-mini).
+3. Anthropic (ANTHROPIC_API_KEY) — official Anthropic Claude endpoints (e.g. claude-3-5-sonnet).
+4. Custom OpenAI-compatible endpoints (OPENAI_BASE_URL or LLM_BASE_URL) — Ollama, vLLM, Groq, Together AI, Mistral, DeepSeek, etc.
 
-Supported free models:
-  nvidia/nemotron-3-super-120b-a12b:free  — 120B, 1M ctx, agentic (default)
-  thinkingmachines/inkling:free           — 975B MoE, 41B active, multimodal
-  minimax/minimax-m2.7:free               — built for multi-agent workflows, 197K ctx
-
-OpenRouter uses the same OpenAI SDK interface — just a different base_url and api_key.
+Model is selected via FORGE_MODEL or defaults per provider.
 """
 
 import os
 import sys
 import time
+from typing import Any
 
+import requests
 from openai import (
     APIConnectionError,
     APIStatusError,
@@ -26,9 +26,10 @@ from openai import (
 )
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+DEFAULT_OPENROUTER_MODEL = "minimax/minimax-m2.7:free"
+DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
+DEFAULT_ANTHROPIC_MODEL = "claude-3-5-sonnet-latest"
 
-# Free OpenRouter tiers rate-limit aggressively; retry transient errors.
 MAX_ATTEMPTS = 3
 RETRYABLE_ERRORS = (
     RateLimitError,
@@ -38,13 +39,132 @@ RETRYABLE_ERRORS = (
 )
 
 
-def get_client() -> OpenAI:
-    """Return an OpenAI client configured for OpenRouter using OPENROUTER_API_KEY."""
+class AnthropicClientAdapter:
+    """Lightweight adapter for Anthropic Messages API with OpenAI-compatible interface."""
+
+    def __init__(self, api_key: str, base_url: str = "https://api.anthropic.com/v1"):
+        self.api_key = api_key
+        self.base_url = base_url.rstrip("/")
+
+    class _Completions:
+        def __init__(self, parent: "AnthropicClientAdapter"):
+            self.parent = parent
+
+        def create(self, *, model: str, messages: list, **kwargs) -> Any:
+            system_prompt = None
+            filtered_messages = []
+            for msg in messages:
+                if msg.get("role") == "system":
+                    system_prompt = msg.get("content")
+                else:
+                    filtered_messages.append({
+                        "role": msg.get("role"),
+                        "content": msg.get("content"),
+                    })
+
+            payload: dict[str, Any] = {
+                "model": model,
+                "max_tokens": kwargs.get("max_tokens", 4096),
+                "messages": filtered_messages,
+            }
+            if system_prompt:
+                payload["system"] = system_prompt
+            if "temperature" in kwargs:
+                payload["temperature"] = kwargs["temperature"]
+
+            headers = {
+                "x-api-key": self.parent.api_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            }
+            resp = requests.post(
+                f"{self.parent.base_url}/messages",
+                json=payload,
+                headers=headers,
+                timeout=kwargs.get("timeout", 60),
+            )
+            if resp.status_code != 200:
+                raise APIStatusError(
+                    message=f"Anthropic API error {resp.status_code}: {resp.text}",
+                    response=resp,
+                    body=resp.text,
+                )
+
+            data = resp.json()
+            text = "".join(
+                block.get("text", "")
+                for block in data.get("content", [])
+                if block.get("type") == "text"
+            )
+
+            class _Msg:
+                content = text
+
+            class _Choice:
+                message = _Msg()
+
+            class _Usage:
+                prompt_tokens = data.get("usage", {}).get("input_tokens", 0)
+                completion_tokens = data.get("usage", {}).get("output_tokens", 0)
+                total_tokens = prompt_tokens + completion_tokens
+
+            class _Response:
+                choices = [_Choice()]
+                usage = _Usage()
+
+            return _Response()
+
+    @property
+    def chat(self):
+        class _Chat:
+            completions = self._Completions(self)
+
+        return _Chat()
+
+
+def get_provider() -> str:
+    """Resolve active LLM provider from environment variables."""
+    explicit = os.environ.get("LLM_PROVIDER", "").strip().lower()
+    if explicit in ("openrouter", "openai", "anthropic", "custom"):
+        return explicit
+    if os.environ.get("OPENROUTER_API_KEY"):
+        return "openrouter"
+    if os.environ.get("OPENAI_BASE_URL") or os.environ.get("LLM_BASE_URL"):
+        return "custom"
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return "anthropic"
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
+    return "openrouter"
+
+
+def get_client() -> Any:
+    """Return configured LLM client instance based on active provider."""
+    provider = get_provider()
+
+    if provider == "anthropic":
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise EnvironmentError("ANTHROPIC_API_KEY is not set in environment.")
+        return AnthropicClientAdapter(api_key=api_key)
+
+    if provider == "openai":
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise EnvironmentError("OPENAI_API_KEY is not set in environment.")
+        return OpenAI(api_key=api_key)
+
+    if provider == "custom":
+        base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("LLM_BASE_URL")
+        api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("LLM_API_KEY") or "dummy"
+        return OpenAI(base_url=base_url, api_key=api_key)
+
+    # Default: OpenRouter
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         raise EnvironmentError(
-            "OPENROUTER_API_KEY is not set. "
-            "Get a free key at https://openrouter.ai/keys and add it to .env"
+            "No LLM credentials found. Set OPENROUTER_API_KEY, OPENAI_API_KEY, "
+            "ANTHROPIC_API_KEY, or OPENAI_BASE_URL in your .env file."
         )
     return OpenAI(
         base_url=OPENROUTER_BASE_URL,
@@ -57,26 +177,29 @@ def get_client() -> OpenAI:
 
 
 def get_model() -> str:
-    """Return the configured model name from FORGE_MODEL or fallback to DEFAULT_MODEL."""
-    return os.environ.get("FORGE_MODEL", DEFAULT_MODEL)
+    """Return model name from FORGE_MODEL or provider-specific default."""
+    configured = os.environ.get("FORGE_MODEL")
+    if configured:
+        return configured
+
+    provider = get_provider()
+    if provider == "openai":
+        return DEFAULT_OPENAI_MODEL
+    if provider == "anthropic":
+        return DEFAULT_ANTHROPIC_MODEL
+    return DEFAULT_OPENROUTER_MODEL
 
 
-def _has_content(response) -> bool:
-    """True when the response carries a non-empty message body.
-    Free models occasionally return an empty choices list or a None
-    content — treated as a transient failure and retried."""
+def _has_content(response: Any) -> bool:
+    """True when the response carries a non-empty message body."""
     try:
         return bool(response.choices[0].message.content)
     except (IndexError, AttributeError, TypeError):
         return False
 
 
-def chat(client: OpenAI, *, model: str, messages: list, **kwargs):
-    """chat.completions.create with retry on transient free-tier errors:
-    rate limits, timeouts, connection drops, 5xx server errors, and empty responses.
-
-    Raises RuntimeError naming the failure after MAX_ATTEMPTS exhausted.
-    """
+def chat(client: Any, *, model: str, messages: list, **kwargs) -> Any:
+    """chat.completions.create with retry on transient network and API errors."""
     last_error = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
@@ -94,16 +217,17 @@ def chat(client: OpenAI, *, model: str, messages: list, **kwargs):
             last_error = RuntimeError("model returned an empty response")
         if attempt < MAX_ATTEMPTS:
             delay = 2 ** attempt
-            # stderr: stdout must stay clean for callers that parse it as JSON
-            print(f"[llm] {type(last_error).__name__} from '{model}', retry {attempt}/{MAX_ATTEMPTS - 1} in {delay}s",
-                  file=sys.stderr)
+            print(
+                f"[llm] {type(last_error).__name__} from '{model}', retry {attempt}/{MAX_ATTEMPTS - 1} in {delay}s",
+                file=sys.stderr,
+            )
             time.sleep(delay)
     raise RuntimeError(
         f"LLM call to '{model}' failed after {MAX_ATTEMPTS} attempts: {last_error}"
     )
 
 
-def usage_of(response) -> dict:
+def usage_of(response: Any) -> dict:
     """Extract token usage from a chat completion as a plain dict."""
     usage = getattr(response, "usage", None)
     if usage is None:
