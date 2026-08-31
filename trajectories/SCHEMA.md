@@ -1,13 +1,13 @@
-# Session Log Schema (DSH-inspired)
+# Session Log Schema
 
-Forge Dispatch adopts the same principle as [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): **the session log is the run**. Markdown trajectories are a human-readable projection; the JSON file is canonical and reconstructable.
+Forge Dispatch enforces an append-only event logging principle: **the session log is the run**. Markdown trajectories are human-readable projections rendered directly from the event stream. The JSON file is the canonical, reconstructable record.
 
 ## Files
 
 | File | Role |
 |---|---|
 | `*.json` | Canonical append-only session log |
-| `*.md` | Judge-readable projection (generated from JSON) |
+| `*.md` | Human-readable projection (generated from JSON) |
 
 Generate both with:
 
@@ -33,14 +33,14 @@ python agents/pipeline.py --case eval/cases/case_01.json --mock --auto-approve \
 
 ### `composition` — runtime manifest
 
-Pins the tuple needed to reproduce a run (DSH's "composition identity"):
+Pins the exact tuple needed to reproduce a run:
 
 ```json
 {
   "pipeline": "forge-dispatch",
   "runner": "langgraph",
   "graph": "sense → decide → (gaps?) → report → approve → (approved?) → save | END",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "model": "minimax/minimax-m2.7:free",
   "provider": "openrouter",
   "checkpoint": "MemorySaver",
   "thread_id": "forge-case_01",
@@ -51,7 +51,7 @@ Pins the tuple needed to reproduce a run (DSH's "composition identity"):
 
 ### `input` — what the Pipeline saw
 
-Ground-truth gaps are **never** included. Only mock/live System responses and run flags.
+Ground-truth gaps are **never** included. Only mock or live system responses and run flags are recorded.
 
 ### `outcome` values
 
@@ -59,12 +59,12 @@ Ground-truth gaps are **never** included. Only mock/live System responses and ru
 |---|---|
 | `saved` | Brief approved (or auto-approved) and written to `eval/results/` |
 | `refused` | Reviewer refused at the APPROVE checkpoint; nothing saved |
-| `no_gaps_saved` | Zero gaps detected; report/approve skipped; save ran with empty gaps |
+| `no_gaps_saved` | Zero gaps detected; report and approve skipped; save ran with empty gaps |
 | `ended` | Run finished without a persisted result (fallback) |
 
 ## Event vocabulary
 
-Every event has monotonic `seq`, ISO8601 `ts`, and a typed `payload`.
+Every event has a monotonic sequence number `seq`, an ISO8601 timestamp `ts`, and a typed `payload`.
 
 | Type | When | Payload |
 |---|---|---|
@@ -77,19 +77,9 @@ Every event has monotonic `seq`, ISO8601 `ts`, and a typed `payload`.
 | `llm.complete` | Baseline single-shot LLM call | `{ "gaps_detected", "usage" }` |
 | `run.end` | Run finishes | `{ "outcome", "result" }` |
 
-## DSH mapping
-
-| DeepSeek Harness concept | Forge Dispatch equivalent |
-|---|---|
-| Append-only session log | `events[]` in `*.json` |
-| Composition manifest | `composition` block |
-| Model-visible state reconstructable from log | `input` + node outputs + LLM deltas |
-| Approval as policy, not loop hack | `checkpoint.interrupt` / `resume` / `skip` |
-| UI/transcript as projection | `*.md` generated from JSON |
-
 ## Reconstruction rules
 
-From a session log alone you can rebuild:
+From a session log alone, you can rebuild:
 
 1. **Signals** — from `node.complete` where `node == "sense"`
 2. **Gaps** — from `node.complete` where `node == "decide"`
@@ -97,4 +87,4 @@ From a session log alone you can rebuild:
 4. **Approval decision** — from `checkpoint.resume` or `checkpoint.skip`
 5. **Final artifact** — from `run.end.result`
 
-No second informal buffer is maintained outside this stream.
+No informal secondary state is maintained outside this stream.

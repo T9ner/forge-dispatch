@@ -24,4 +24,4 @@
 - [baseline/](./baseline/AGENTS.md): Single-prompt baseline agent for before/after comparison
 - [agents/](./agents/AGENTS.md): Forge multi-agent Pipeline (Sensing → Reasoning → Reporting)
 - [eval/](./eval/AGENTS.md): Evaluation harness — 10 test cases and scorer
-- [trajectories/](./trajectories/AGENTS.md): DeepSeek Harness session logs and trajectory projections
+- [trajectories/](./trajectories/AGENTS.md): Canonical session logs and trajectory projections

@@ -1,13 +1,12 @@
 # Agent Trajectories
 
 Representative execution traces for every agent in Forge Dispatch. Each
-run produces two files following the [DeepSeek Harness session-log
-pattern](https://github.com/deepseek-ai/deepseek-harness):
+run produces two files following a dual-format session log architecture:
 
 | Extension | Role |
 |---|---|
 | `.json` | **Canonical** append-only session log (reconstructable) |
-| `.md` | Human-readable projection for judges |
+| `.md` | Human-readable projection for review |
 
 See [SCHEMA.md](./SCHEMA.md) for the full event vocabulary.
 
@@ -45,7 +44,7 @@ python baseline/run.py --case eval/cases/case_01.json \
 
 ## Reading the session log
 
-Events are typed and sequenced (`seq` 1, 2, 3…):
+Events are typed and sequenced (`seq` 1, 2, 3...):
 
 - **`run.start`** — input the Pipeline saw (mock System responses; no ground truth)
 - **`node.complete`** — output delta from each graph node (`sense`, `decide`, `report`, …)
@@ -55,6 +54,6 @@ Events are typed and sequenced (`seq` 1, 2, 3…):
 - **`run.end`** — final outcome and persisted result
 
 The `composition` block pins model, graph topology, and thread ID so runs
-are reproducible — the same idea as DSH's composition manifest.
+are completely reproducible.
 
 All data in every trajectory is synthetic.

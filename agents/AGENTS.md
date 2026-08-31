@@ -10,7 +10,7 @@
 - Each agent module exposes `run(context: dict) -> dict`. The pipeline nodes wrap these calls and map them to/from `PipelineState`.
 - Conditional edge after `decide`: if no gaps found, skip `report` and go straight to `save`.
 - Human-approval checkpoint is a graph node (`approve`) using LangGraph `interrupt()`. When `--auto-approve` is set, the node passes through and the session log records `checkpoint.skip`.
-- `trace.py` implements the DSH-inspired session log. `--trace` on `pipeline.py` writes canonical `.json` plus a markdown projection. See `trajectories/SCHEMA.md`.
+- `trace.py` implements the canonical session log. `--trace` on `pipeline.py` writes canonical `.json` plus a markdown projection. See `trajectories/SCHEMA.md`.
 - On any System API failure, agents must raise `SystemConnectionError(system_name, original_error)`.
 
 ## Graph structure

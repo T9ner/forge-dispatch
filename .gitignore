@@ -34,3 +34,6 @@ Thumbs.db
 
 # Firecrawl cache (local dev only)
 .firecrawl/
+
+# Local video scripts and recordings
+docs/

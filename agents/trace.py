@@ -1,12 +1,11 @@
 """
-DSH-inspired session log for Forge Dispatch runs.
+Canonical session log engine for Forge Dispatch runs.
 
-DeepSeek Harness treats the append-only session log as the canonical
-record of a run; UI and transcripts are projections from that stream.
-Forge adopts the same split:
+Treats the append-only session log as the canonical record of a run;
+human-readable Markdown trajectories are projections from that event stream.
 
-  *.json  — canonical, machine-readable session log (reconstructable)
-  *.md    — human-readable projection for judges and docs
+  *.json  - canonical, machine-readable session log (reconstructable)
+  *.md    - human-readable projection for review
 
 See trajectories/SCHEMA.md for the event vocabulary.
 """
@@ -208,7 +207,7 @@ def render_markdown(log: SessionLog, *, agent_prompts: dict[str, str] | None = N
         "# Agent Trajectory — Forge Dispatch",
         "",
         f"- **Run ID:** `{log.run_id}`",
-        f"- **Schema:** `{SCHEMA_VERSION}` (DSH-inspired session log — see `trajectories/SCHEMA.md`)",
+        f"- **Schema:** `{SCHEMA_VERSION}` (Canonical session log — see `trajectories/SCHEMA.md`)",
         f"- **Pipeline:** `{comp.get('pipeline', 'unknown')}`",
         f"- **Case:** `{log.run_input.get('case_id', comp.get('case_id', 'unknown'))}`",
         f"- **Model:** `{comp.get('model', 'unknown')}` via `{comp.get('provider', 'unknown')}`",

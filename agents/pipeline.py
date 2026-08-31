@@ -18,8 +18,8 @@ Usage:
     python agents/pipeline.py --case eval/cases/case_01.json [--mock]
         [--auto-approve] [--trace trajectories/run]
 
---trace writes a DSH-inspired session log (.json, canonical) and a
-markdown projection (.md) — see trajectories/SCHEMA.md.
+--trace writes a canonical session log (.json) and a
+markdown projection (.md). See trajectories/SCHEMA.md.
 """
 
 import argparse
@@ -304,7 +304,7 @@ if __name__ == "__main__":
     parser.add_argument("--mock", action="store_true", help="Use mock_responses from case file")
     parser.add_argument("--auto-approve", action="store_true", help="Skip human approval (for eval runs)")
     parser.add_argument("--trace", default=None,
-                        help="Write DSH-inspired session log (.json) + markdown projection (.md)")
+                        help="Write canonical session log (.json) + markdown projection (.md)")
     args = parser.parse_args()
 
     run_pipeline(args.case, mock=args.mock, auto_approve=args.auto_approve, trace_path=args.trace)

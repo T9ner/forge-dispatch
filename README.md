@@ -12,6 +12,7 @@ Forge Dispatch is a multi-agent stack audit pipeline built on LangGraph. It sens
 - [System Architecture](#the-forge-solution)
 - [Improvement Changelog](#improvement-changelog)
 - [Evaluation and Benchmarks](#evaluation)
+- [The Expanding Potential of Forge](#the-expanding-potential-of-forge)
 - [Reproducibility Guide](#reproducibility--run-it-yourself)
 - [Failure Mode and Hot Take](#main-failure-mode--hot-take)
 - [Prior Work Disclosure](#what-existed-before-this-competition)
@@ -75,7 +76,7 @@ Before any brief is saved or delivered, the graph pauses at the `approve` node u
 | **Iteration 1** | Added live GitHub and Linear API extraction in a dedicated sensing node | Clean structured signals extracted directly from tool APIs | Kept |
 | **Iteration 2** | Added a cross-system reasoning step to correlate signals across tools | Detection reached **100%**, false positive rate dropped from **10% to 0%** | Kept |
 | **Iteration 3** | Added a human approval checkpoint before brief delivery | Real LangGraph `interrupt()`, delivery is fully human-gated | Kept |
-| **Final** | Full 3-agent pipeline with DeepSeek Harness append-only tracing | **100% detection, 0% false positives**, 33.4s average run time ([`eval/results/forge.json`](./eval/results/forge.json)) | Ships |
+| **Final** | Full 3-agent pipeline with canonical append-only session logging | **100% detection, 0% false positives**, 33.4s average run time ([`eval/results/forge.json`](./eval/results/forge.json)) | Ships |
 
 ---
 
@@ -96,6 +97,28 @@ Before any brief is saved or delivered, the graph pauses at the `approve` node u
 | **Cost per audit** | $0.00 (free models) | $0.00 (free models) | $0.00 |
 
 Detailed per-case results are stored in [`eval/results/baseline.json`](./eval/results/baseline.json) and [`eval/results/forge.json`](./eval/results/forge.json).
+
+---
+
+## The Expanding Potential of Forge
+
+While this submission focuses on GitHub and Linear, the Forge Dispatch architecture is built as an open, tool-agnostic state machine. The `Sense` node accepts plug-and-play collectors, feeding structured signals into the shared `PipelineState` without changing the reasoning graph or approval contracts.
+
+Here is how Forge extends across the full modern startup stack:
+
+1. **Customer Support and Chat (Slack, Discord, Zendesk, Intercom):**  
+   Correlates customer-reported bugs in Slack channels or Zendesk tickets against active engineering sprints. If a high-priority bug is reported five times in support but no ticket exists in Linear or Jira, Forge surfaces the missing ticket immediately.
+
+2. **Product Documentation (Notion, Confluence, Coda):**  
+   Detects drift between product roadmaps and reality. For example, a feature marked "Shipped" in a Notion PRD when no matching pull request has been merged in GitHub.
+
+3. **Production Observability (Sentry, Datadog, PagerDuty):**  
+   Links production error spikes to recent deployments. If a critical Sentry issue appears within two hours of a merged pull request, Forge connects the code commit to the regression and alerts ops leads before customers complain.
+
+4. **Sales and CRM (HubSpot, Salesforce, Stripe):**  
+   Identifies promises made in sales deals that have no corresponding engineering deliverables, or detects enterprise contracts signed with custom features that were never scheduled into a sprint.
+
+Because every new tool integration is simply a connector returning structured dictionary signals, expanding Forge to cover new systems requires only a lightweight adapter in `agents/sensing.py`.
 
 ---
 
@@ -141,7 +164,7 @@ python eval/score.py
 # Evaluates all 10 cases, updates eval/results/, and prints the summary table
 ```
 
-### Generate DeepSeek Harness trajectory logs
+### Generate session trajectory logs
 
 ```bash
 python agents/pipeline.py --case eval/cases/case_01.json --mock --auto-approve --trace trajectories/pipeline_case_01_approved
@@ -164,7 +187,7 @@ python baseline/run.py --case eval/cases/case_01.json --trace trajectories/basel
 - The high-level concept of stack audits for AI workers
 
 **What was built specifically for this submission:**  
-Everything in this repository, including the LangGraph pipeline, the evaluation harness and test cases, the single-prompt baseline, the DeepSeek Harness session logging engine, and the benchmark results.
+Everything in this repository, including the LangGraph pipeline, the evaluation harness and test cases, the single-prompt baseline, the canonical session logging engine, and the benchmark results.
 
 ---
 
@@ -172,9 +195,8 @@ Everything in this repository, including the LangGraph pipeline, the evaluation 
 
 - [`agents/pipeline.py`](./agents/pipeline.py): LangGraph orchestrator and state graph definition.
 - [`agents/reasoning.py`](./agents/reasoning.py): Decide node with cross-system correlation logic.
-- [`agents/trace.py`](./agents/trace.py): DeepSeek Harness append-only session logging engine.
+- [`agents/trace.py`](./agents/trace.py): Canonical append-only session logging engine.
 - [`baseline/run.py`](./baseline/run.py): Single-prompt comparison agent.
 - [`eval/score.py`](./eval/score.py): Benchmark evaluation harness.
 - [`eval/cases/`](./eval/cases/): 10 synthetic test scenarios with ground-truth data.
 - [`trajectories/`](./trajectories/): Dual-file session logs (`.json`) and markdown projections (`.md`).
-- [`docs/video_script.md`](./docs/video_script.md): 5-minute video walkthrough script with exact timings.

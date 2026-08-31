@@ -144,7 +144,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Forge Dispatch — baseline agent")
     parser.add_argument("--case", required=True, help="Path to case JSON file")
     parser.add_argument("--trace", default=None,
-                        help="Write DSH-inspired session log (.json) + markdown projection (.md)")
+                        help="Write canonical session log (.json) + markdown projection (.md)")
     args = parser.parse_args()
 
     result = run_baseline(args.case, trace_path=args.trace)

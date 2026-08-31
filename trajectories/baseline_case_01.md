@@ -1,7 +1,7 @@
 # Agent Trajectory — Forge Dispatch
 
 - **Run ID:** `baseline-case_01-0508a31a`
-- **Schema:** `1.0` (DSH-inspired session log — see `trajectories/SCHEMA.md`)
+- **Schema:** `1.0` (Canonical session log — see `trajectories/SCHEMA.md`)
 - **Pipeline:** `forge-dispatch-baseline`
 - **Case:** `case_01`
 - **Model:** `minimax/minimax-m2.7:free` via `openrouter`

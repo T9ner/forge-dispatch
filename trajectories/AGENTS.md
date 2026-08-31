@@ -1,6 +1,6 @@
 # trajectories/
 
-- Purpose: DeepSeek Harness (DSH) inspired session logs and markdown trajectory projections.
+- Purpose: Canonical append-only session logs and markdown trajectory projections.
 - Ownership: `SCHEMA.md`, `README.md`, all `*.json` and `*.md` trajectory files.
 
 ## Local Contracts
