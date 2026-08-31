@@ -1,25 +1,40 @@
 # Forge Dispatch
 
-**micro1 Agentic Workflows Hackathon submission**
+micro1 Agentic Workflows Hackathon submission.
+
+Forge Dispatch is a multi-agent stack audit pipeline built on LangGraph. It senses cross-tool discrepancies across GitHub and Linear, resolves status drift, and generates an actionable weekly brief with human-in-the-loop approval.
+
+---
+
+## Contents
+
+- [The User and Their Bottleneck](#the-user-and-their-bottleneck)
+- [System Architecture](#the-forge-solution)
+- [Improvement Changelog](#improvement-changelog)
+- [Evaluation and Benchmarks](#evaluation)
+- [Reproducibility Guide](#reproducibility--run-it-yourself)
+- [Failure Mode and Hot Take](#main-failure-mode--hot-take)
+- [Prior Work Disclosure](#what-existed-before-this-competition)
+- [Important Files and Directories](#important-files-and-directories)
 
 ---
 
 ## The User and Their Bottleneck
 
-**Who has this problem?**
-Startup founders and ops leads at 5–50 person companies running 3–5 tools simultaneously (GitHub, Linear, Notion, Slack, CRM). Every tool tracks a piece of the truth. Nobody has the full picture.
+**Who has this problem?**  
+Founders and operations leads at 5 to 50 person startups running multiple tools at the same time, including GitHub, Linear, Notion, Slack, and CRMs. Every tool tracks a piece of the truth, but no single dashboard gives the full picture.
 
-**What bottleneck makes it worth solving?**
-Pulling a coherent status picture across a startup's Stack takes 30–60 minutes manually, happens reactively (usually when something has already gone wrong), and misses drift between stated and actual state. A PR merged three days ago but the Linear ticket is still "In Progress." A feature is marked done in Notion but has three open bugs in GitHub. These gaps are invisible until they cause a problem.
+**What bottleneck makes it worth solving?**  
+Pulling a coherent status picture across a company's tools takes 30 to 60 minutes when done by hand. Teams do it reactively, usually after something breaks. Status drifts quietly between tools: a pull request merges on Friday, but the Linear ticket stays marked "In Progress" on Monday. A feature is marked done in Linear, but two critical bug issues remain open in GitHub. These gaps stay invisible until they delay a release or cause an incident.
 
-**Why solving it matters:**
-Each missed gap is a compounding cost — delayed decisions, surprise regressions, misaligned teams. For a 10-person startup, one gap-induced incident per week at 2 hours of firefighting is ~100 engineer-hours lost per year.
+**Why solving it matters:**  
+Each missed gap compounds into delayed decisions, surprise regressions, and misaligned teams. For a 10-person startup, losing two hours a week to cross-tool firefighting wastes roughly 100 engineer-hours every year.
 
 ---
 
 ## The Forge Solution
 
-Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Three Agents collaborate as nodes in a state graph to deliver a weekly intelligence Brief without human assembly:
+Forge Dispatch runs as a directed state graph built on LangGraph. Three specialized agents collaborate as nodes in the graph to deliver a verified weekly intelligence brief:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -35,7 +50,7 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 │                        │            │ APPROVE  │             │
 │                        │            │  node    │             │
 │                        │            └──────────┘             │
-│                        │              human ✓│               │
+│                        │              human  │               │
 │                        ▼                     ▼               │
 │                   ┌────────┐           ┌────────┐            │
 │                   │  SAVE  │           │  SAVE  │            │
@@ -46,39 +61,41 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 └──────────────────────────────────────────────────────────────┘
 ```
 
-**State flows as a typed dict** through every node. Each node reads only what it needs and writes its output field. The conditional edge after DECIDE skips reporting entirely when no gaps are found.
+State flows through every node as a typed dictionary (`PipelineState`). Each node reads only the fields it needs and writes its own output field. If the decide node finds zero gaps, the pipeline skips brief generation entirely and routes straight to saving.
+
+Before any brief is saved or delivered, the graph pauses at the `approve` node using a real LangGraph `interrupt()`. A human reviewer in the terminal enters `y` or `N`. Refusal terminates the run immediately without writing data.
 
 ---
 
 ## Improvement Changelog
 
-| Stage | What We Tried & Why | Evidence | Decision |
+| Stage | What We Tried and Why | Evidence | Decision |
 |---|---|---|---|
-| **Baseline** | Single LLM prompt with flat context dump | 95% detection, 10% false positives (`eval/results/baseline.json`) | Starting point |
-| **Iteration 1** | Added live GitHub + Linear API polling (Sensing Agent) | Clean structured Signals extracted directly from tool APIs | Kept |
-| **Iteration 2** | Added cross-agent Reasoning step to correlate Signals across Systems | Detection rate reached **100%**, False Positive Rate dropped from **10% → 0%** | Kept |
-| **Iteration 3** | Added human-approval checkpoint before Brief delivery | Real LangGraph `interrupt()`, consequential delivery is 100% human-gated | Kept |
-| **Final** | Full 3-Agent Pipeline with DeepSeek Harness tracing | **100% detection, 0% FPR**, 33.4s avg (`eval/results/forge.json`) | Ships |
+| **Baseline** | Single prompt with a flat text context dump | 95% detection rate, 10% false positive rate ([`eval/results/baseline.json`](./eval/results/baseline.json)) | Starting point |
+| **Iteration 1** | Added live GitHub and Linear API extraction in a dedicated sensing node | Clean structured signals extracted directly from tool APIs | Kept |
+| **Iteration 2** | Added a cross-system reasoning step to correlate signals across tools | Detection reached **100%**, false positive rate dropped from **10% to 0%** | Kept |
+| **Iteration 3** | Added a human approval checkpoint before brief delivery | Real LangGraph `interrupt()`, delivery is fully human-gated | Kept |
+| **Final** | Full 3-agent pipeline with DeepSeek Harness append-only tracing | **100% detection, 0% false positives**, 33.4s average run time ([`eval/results/forge.json`](./eval/results/forge.json)) | Ships |
 
 ---
 
 ## Evaluation
 
-**Primary metric:** Gap detection rate — what fraction of injected Gaps does the solution correctly surface vs. miss?
+**Primary metric:** Gap detection rate, measuring the fraction of injected discrepancies the agent surfaces correctly.
 
-**Secondary metrics:** False positive rate, wall-clock duration, token usage.
+**Secondary metrics:** False positive rate, wall-clock run time, token usage.
 
-**Test suite:** 10 synthetic startup scenarios in `eval/cases/`. Each case has a known ground-truth set of Gaps across GitHub and Linear.
+**Test suite:** 10 synthetic startup scenarios in [`eval/cases/`](./eval/cases/). Each case contains ground-truth discrepancies across GitHub pull requests, issues, and Linear tickets.
 
 | Metric | Baseline (Single-Prompt) | Forge Dispatch (LangGraph) | Change |
 |---|---|---|---|
 | **Gap detection rate** | 95% | **100%** | **+5%** |
 | **False positive rate** | 10% | **0%** | **-10% (eliminated)** |
-| **Avg time per case** | 23.7s | 33.4s | +9.7s (multi-agent verification) |
+| **Average run time** | 23.7s | 33.4s | +9.7s (multi-node verification) |
 | **Total token usage** | 9,052 tokens | 20,845 tokens | +11,793 (graph decomposition) |
-| **Cost per Brief** | $0.00 (free models) | $0.00 (free models) | $0.00 |
+| **Cost per audit** | $0.00 (free models) | $0.00 (free models) | $0.00 |
 
-*Full machine-readable results in `eval/results/baseline.json` and `eval/results/forge.json`.*
+Detailed per-case results are stored in [`eval/results/baseline.json`](./eval/results/baseline.json) and [`eval/results/forge.json`](./eval/results/forge.json).
 
 ---
 
@@ -88,8 +105,8 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 
 - Python 3.11+
 - `OPENROUTER_API_KEY` (Free model access via OpenRouter)
-- `GITHUB_TOKEN` (read-only, for live mode)
-- `LINEAR_API_KEY` (read-only, for live mode)
+- `GITHUB_TOKEN` (Read-only, required only for live API mode)
+- `LINEAR_API_KEY` (Read-only, required only for live API mode)
 
 ### Setup
 
@@ -110,17 +127,21 @@ python baseline/run.py --case eval/cases/case_01.json
 ### Run the Forge Pipeline
 
 ```bash
+# Interactive mode (pauses at the human approval checkpoint)
 python agents/pipeline.py --case eval/cases/case_01.json --mock
+
+# Auto-approve mode (bypasses checkpoint for automated tests)
+python agents/pipeline.py --case eval/cases/case_01.json --mock --auto-approve
 ```
 
-### Run full evaluation
+### Run the full benchmark evaluation
 
 ```bash
 python eval/score.py
-# outputs eval/results/baseline.json and eval/results/forge.json
+# Evaluates all 10 cases, updates eval/results/, and prints the summary table
 ```
 
-### Generate DSH Trajectories
+### Generate DeepSeek Harness trajectory logs
 
 ```bash
 python agents/pipeline.py --case eval/cases/case_01.json --mock --auto-approve --trace trajectories/pipeline_case_01_approved
@@ -131,16 +152,29 @@ python baseline/run.py --case eval/cases/case_01.json --trace trajectories/basel
 
 ## Main Failure Mode & Hot Take
 
-**Main Failure Mode:** Single-shot baseline prompts suffer from cross-tool confusion and false positives (10% FPR) — frequently hallucinating gaps on legitimate non-code tickets (like documentation updates closed without PRs) or missing subtler cross-system regressions. By decomposing the workflow into dedicated **Sensing** (data extraction), **Reasoning** (evidence-based cross-referencing with strict grounding), and **Reporting** (actionable synthesis), Forge Dispatch eliminated all false positives (0% FPR) and achieved 100% gap detection.
+**Main Failure Mode:** Single-shot baseline prompts suffer from cross-tool confusion and false positives (10% FPR). They regularly hallucinate gaps on legitimate non-code tasks, such as documentation updates closed without pull requests, or miss subtler cross-system regressions. By splitting the task into dedicated sensing, reasoning, and reporting nodes, Forge Dispatch eliminated all false positives and reached 100% gap detection.
 
-**Hot Take:** Monolithic prompts dumping raw JSON into huge context windows look deceptively easy, but they cannot provide consequential reliability in production stacks. Real-world agentic workflows require state graph decomposition, verifiable evidence extraction, and real human-in-the-loop interrupt checkpoints before any intelligence brief reaches leadership.
+**Hot Take:** Monolithic prompts dumping raw JSON into huge context windows look simple, but they are unreliable in production stacks. Real agentic workflows need state graph decomposition, verifiable evidence extraction, and real human-in-the-loop checkpoints before any report reaches company leadership.
 
 ---
 
 ## What Existed Before This Competition
 
-- [forgeaicore.com](https://www.forgeaicore.com) — Forge's product website and brand
-- The Forge AI Worker architecture concept and the Stack Audit service offering
+- [forgeaicore.com](https://www.forgeaicore.com), Forge's product website and brand
+- The high-level concept of stack audits for AI workers
 
-**What was built for this submission:**
-Everything in this repository — the Pipeline code, evaluation harness, test cases, and baseline.
+**What was built specifically for this submission:**  
+Everything in this repository, including the LangGraph pipeline, the evaluation harness and test cases, the single-prompt baseline, the DeepSeek Harness session logging engine, and the benchmark results.
+
+---
+
+## Important Files and Directories
+
+- [`agents/pipeline.py`](./agents/pipeline.py): LangGraph orchestrator and state graph definition.
+- [`agents/reasoning.py`](./agents/reasoning.py): Decide node with cross-system correlation logic.
+- [`agents/trace.py`](./agents/trace.py): DeepSeek Harness append-only session logging engine.
+- [`baseline/run.py`](./baseline/run.py): Single-prompt comparison agent.
+- [`eval/score.py`](./eval/score.py): Benchmark evaluation harness.
+- [`eval/cases/`](./eval/cases/): 10 synthetic test scenarios with ground-truth data.
+- [`trajectories/`](./trajectories/): Dual-file session logs (`.json`) and markdown projections (`.md`).
+- [`docs/video_script.md`](./docs/video_script.md): 5-minute video walkthrough script with exact timings.
