@@ -1,0 +1,29 @@
+{
+  "case_id": "case_05",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "Two open billing bugs (issues #92 and #93) exist after the billing module rewrite was marked 'Done'. Issue #93 is labeled 'critical'. Neither bug appears to be tracked in Linear, and the completed ticket LIN-34 shows no indication these known issues were addressed or acknowledged."
+    }
+  ],
+  "brief": "## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (1 total)\n\n**[Gap 1]** Billing bugs left untracked after rewrite marked complete\n\u2192 The billing module rewrite was merged (PR #78) and closed as \"Done\" in Linear (LIN-34), but two known billing bugs remain open on GitHub \u2014 including one marked critical. Neither bug appears in Linear, so they're invisible to the team's ticket workflow.\n\u2192 Evidence: GitHub issues #92 (\"Bug: billing module crashes on nil invoice\") and #93 (\"Bug: duplicate charges on retry\") are still open. Linear ticket LIN-34 shows no linked issues or references to these bugs.\n\u2192 Suggested action: Create Linear tickets for issues #92 and #93, link them to LIN-34, and prioritize #93 as a hotfix.",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "Two open billing bugs (issues #92 and #93) exist after the billing module rewrite was marked 'Done'. Issue #93 is labeled 'critical'. Neither bug appears to be tracked in Linear, and the completed ticket LIN-34 shows no indication these known issues were addressed or acknowledged.",
+      "evidence": {
+        "github": "PR #78 merged 'Billing module rewrite' and closes LIN-34. Open issues: #92 'Bug: billing module crashes on nil invoice' and #93 'Bug: duplicate charges on retry' (critical, billing).",
+        "linear": "LIN-34 'Billing module rewrite' state: Done. Labels: feature."
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1240,
+    "completion_tokens": 1072,
+    "total_tokens": 2312
+  }
+}

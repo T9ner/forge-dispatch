@@ -1,0 +1,29 @@
+{
+  "case_id": "case_01",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "PR #42 (Add user auth flow) was merged on 2026-08-25 with body stating 'Closes LIN-55', but the linked Linear ticket LIN-55 remains in 'In Progress' state and was last updated on 2026-08-20 (before the merge). The ticket should have been moved to 'Done' after the PR merged."
+    }
+  ],
+  "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (1 total)\n\n**[Gap 1]** Merged PR didn't close its linked Linear ticket\n\u2192 PR #42 was merged on August 25 and says \"Closes LIN-55\" in the description, but the Linear ticket is still showing as \"In Progress\" and hasn't been touched since August 20.\n\u2192 **Evidence:** PR #42 merged 2026-08-25 (body: \"Closes LIN-55. Implements the login and signup screens.\"); LIN-55 still \"In Progress\", last updated 2026-08-20\n\u2192 **Suggested action:** Move LIN-55 to \"Done\" in Linear \u2014 either manually or investigate if your automation failed.\n\n---",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #42 (Add user auth flow) was merged on 2026-08-25 with body stating 'Closes LIN-55', but the linked Linear ticket LIN-55 remains in 'In Progress' state and was last updated on 2026-08-20 (before the merge). The ticket should have been moved to 'Done' after the PR merged.",
+      "evidence": {
+        "github": "PR #42 merged 2026-08-25, body: 'Closes LIN-55. Implements the login and signup screens.'",
+        "linear": "LIN-55 title 'Add user auth flow', state 'In Progress', updatedAt 2026-08-20T08:00:00Z"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1169,
+    "completion_tokens": 724,
+    "total_tokens": 1893
+  }
+}

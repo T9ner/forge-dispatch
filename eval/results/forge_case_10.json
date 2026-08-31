@@ -1,0 +1,45 @@
+{
+  "case_id": "case_10",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "PR #405 references Linear ticket LIN-330, but no corresponding Linear ticket exists in the provided data. This could indicate an orphaned PR reference or a missing ticket."
+    },
+    {
+      "id": "gap_2",
+      "description": "LIN-300 is marked 'Done' but two critical bug issues (#410, #411) were opened on the same day as the PR merge, directly referencing the payment migration. This indicates potential premature closure or missing regression tracking against the ticket."
+    }
+  ],
+  "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Ghost ticket reference in PR #405\n\u2192 PR #405 mentions Linear ticket LIN-330, but that ticket doesn't appear to exist. This could mean the ticket was never created, was deleted, or the PR is referencing the wrong ID.\n\u2192 Evidence: PR #405 body references \"Chores for LIN-330\"; no LIN-330 found in Linear\n\u2192 Suggested action: Verify whether LIN-330 should be created, or update PR #405 to remove the orphaned reference.\n\n**[Gap 2]** LIN-300 closed, but critical payment bugs opened same day\n\u2192 LIN-300 is marked \"Done,\" yet two critical bug reports (#410 and #411) were opened on the same day as the PR merge, both directly tied to the payment migration that LIN-300 covered. This suggests the ticket may have been closed before the issues surfaced.\n\u2192 Evidence: Issues #410 (\"CRITICAL: Payments failing for EU users after gateway migration\") and #411 (\"Payment receipts not being emailed after migration\") opened on 2026-08-27; LIN-300 marked Done same day\n\u2192 Suggested action: Reopen LIN-300 and link issues #410 and #411 to it for proper regression tracking.\n\n---",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #405 references Linear ticket LIN-330, but no corresponding Linear ticket exists in the provided data. This could indicate an orphaned PR reference or a missing ticket.",
+      "evidence": {
+        "github": "PR #405 body: 'Chores for LIN-330'",
+        "linear": "No ticket with ID LIN-330 found in provided signals"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    },
+    {
+      "id": "gap_2",
+      "description": "LIN-300 is marked 'Done' but two critical bug issues (#410, #411) were opened on the same day as the PR merge, directly referencing the payment migration. This indicates potential premature closure or missing regression tracking against the ticket.",
+      "evidence": {
+        "github": "Issue #410: 'CRITICAL: Payments failing for EU users after gateway migration' (bug, critical, payments); Issue #411: 'Payment receipts not being emailed after migration' (bug, payments)",
+        "linear": "LIN-300 state: 'Done', updatedAt: 2026-08-27T10:00:00Z"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1429,
+    "completion_tokens": 1164,
+    "total_tokens": 2593
+  }
+}

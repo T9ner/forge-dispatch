@@ -1,0 +1,29 @@
+{
+  "case_id": "case_03",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "PR #17 claims to 'Fixes LIN-999' but this Linear ticket does not appear in the Linear data provided. The PR was merged on 2026-08-26, but the referenced ticket ID cannot be verified against any Linear ticket in the dataset."
+    }
+  ],
+  "brief": "## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (1 total)\n\n**[Gap 1]** PR references a ticket that doesn't exist\n\u2192 PR #17 says it fixes LIN-999, but that ticket doesn't appear in your Linear workspace. The fix can't be traced to any real work item.\n\u2192 Evidence: GitHub PR #17 (\"Fix payment timeout\") \u2014 body contains \"Fixes LIN-999\"; Linear shows no ticket with ID LIN-999 (only LIN-100 exists in the dataset)\n\u2192 Suggested action: Update the PR description to reference the correct ticket, or check with whoever created the PR to clarify the intended ticket.",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #17 claims to 'Fixes LIN-999' but this Linear ticket does not appear in the Linear data provided. The PR was merged on 2026-08-26, but the referenced ticket ID cannot be verified against any Linear ticket in the dataset.",
+      "evidence": {
+        "github": "PR #17 'Fix payment timeout' - body contains 'Fixes LIN-999'",
+        "linear": "No ticket with ID LIN-999 found in Linear tickets list. Only LIN-100 exists."
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1122,
+    "completion_tokens": 953,
+    "total_tokens": 2075
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "case_id": "case_02",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "Feature ticket LIN-88 'Implement CSV export' is marked 'Done' in Linear, but there is no corresponding merged PR in GitHub. This suggests the code was never delivered or the delivery is not linked to the ticket."
+    }
+  ],
+  "brief": "\n---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (1 total)\n\n**[Gap 1]** Feature marked complete, but no code was merged\n\n\u2192 Linear ticket **LIN-88** (\"Implement CSV export\") is marked **Done**, but no corresponding merged PR was found in GitHub. The work may not have been delivered, or the delivery was never linked to this ticket.\n\n\u2192 **Evidence:** GitHub shows zero merged PRs for this work. Linear shows LIN-88 with state \"Done\" and label \"feature\", last updated 2026-08-22.\n\n\u2192 **Suggested action:** Either locate the PR that delivered this feature and link it to LIN-88, or reopen the ticket and treat it as undelivered.\n\n---",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "Feature ticket LIN-88 'Implement CSV export' is marked 'Done' in Linear, but there is no corresponding merged PR in GitHub. This suggests the code was never delivered or the delivery is not linked to the ticket.",
+      "evidence": {
+        "github": "merged_prs: [] (no merged PRs found)",
+        "linear": "LIN-88: 'Implement CSV export' - state: 'Done', label: 'feature', updatedAt: 2026-08-22T14:00:00Z"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1078,
+    "completion_tokens": 772,
+    "total_tokens": 1850
+  }
+}

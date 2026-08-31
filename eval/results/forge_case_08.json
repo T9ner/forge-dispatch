@@ -1,0 +1,45 @@
+{
+  "case_id": "case_08",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation."
+    },
+    {
+      "id": "gap_2",
+      "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change."
+    }
+  ],
+  "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Linear ticket still shows \"In Progress\" after PR was merged\n\u2192 PR #200 for the dark mode toggle was merged on August 24, but the linked Linear ticket LIN-150 still shows \"In Progress\" and wasn't updated. The work is done in code \u2014 the ticket just wasn't closed.\n\u2192 Evidence: PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Close ticket LIN-150 in Linear and move it to \"Done.\"\n\n**[Gap 2]** New bug filed on the dark mode feature shortly after merge\n\u2192 Issue #210 (\"Bug: dark mode flickers on page load\") was opened after PR #200 merged, which may mean the dark mode feature shipped with a regression. The bug is labeled \"bug\" and \"ui\" in GitHub.\n\u2192 Evidence: Issue #210 (GitHub), PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Review Issue #210 and decide whether to hotfix or scope a fix into the next sprint.\n\n---\n\nBoth gaps stem from the same feature. Resolving Gap 1 (closing the ticket) is a 30-second task. Gap 2 may need actual engineering attention.",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation.",
+      "evidence": {
+        "github": "PR #200 'Dark mode toggle' merged on 2026-08-24, body states 'Closes LIN-150'",
+        "linear": "LIN-150 'Dark mode toggle' state is still 'In Progress', last updated 2026-08-20 (before the merge)"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    },
+    {
+      "id": "gap_2",
+      "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change.",
+      "evidence": {
+        "github": "Issue #210 'Bug: dark mode flickers on page load' opened with labels ['bug', 'ui'], referencing the same 'dark mode' feature as PR #200",
+        "linear": "LIN-150 'Dark mode toggle' is marked 'In Progress' but the code was already merged"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1512,
+    "completion_tokens": 1181,
+    "total_tokens": 2693
+  }
+}
