@@ -1,0 +1,11 @@
+{
+  "case_id": "case_04",
+  "gaps_detected": [],
+  "brief": "No gaps detected. No brief generated.",
+  "raw_gaps": [],
+  "usage": {
+    "prompt_tokens": 818,
+    "completion_tokens": 377,
+    "total_tokens": 1195
+  }
+}

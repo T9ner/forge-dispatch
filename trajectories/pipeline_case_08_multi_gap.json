@@ -1,0 +1,472 @@
+{
+  "schema_version": "1.0",
+  "run_id": "forge-case_08-6225ef69",
+  "started_at": "2026-08-31T04:34:33.457331+00:00",
+  "ended_at": "2026-08-31T04:35:16.047156+00:00",
+  "outcome": "saved",
+  "composition": {
+    "pipeline": "forge-dispatch",
+    "runner": "langgraph",
+    "graph": "sense \u2192 decide \u2192 (gaps?) \u2192 report \u2192 approve \u2192 (approved?) \u2192 save | END",
+    "model": "minimax/minimax-m2.7:free",
+    "provider": "openrouter",
+    "checkpoint": "MemorySaver",
+    "thread_id": "forge-case_08",
+    "mock": true,
+    "auto_approve": true
+  },
+  "input": {
+    "case_id": "case_08",
+    "mock": true,
+    "auto_approve": true,
+    "mock_responses": {
+      "github": {
+        "merged_prs": [
+          {
+            "number": 200,
+            "title": "Dark mode toggle",
+            "body": "Closes LIN-150.",
+            "merged_at": "2026-08-24T08:00:00Z"
+          },
+          {
+            "number": 201,
+            "title": "Rate limiting middleware",
+            "body": "See LIN-160 for context.",
+            "merged_at": "2026-08-25T14:00:00Z"
+          }
+        ],
+        "open_issues": [
+          {
+            "number": 210,
+            "title": "Bug: dark mode flickers on page load",
+            "labels": [
+              "bug",
+              "ui"
+            ]
+          }
+        ]
+      },
+      "linear": {
+        "tickets": [
+          {
+            "id": "LIN-150",
+            "title": "Dark mode toggle",
+            "state": {
+              "name": "In Progress"
+            },
+            "updatedAt": "2026-08-20T08:00:00Z",
+            "labels": {
+              "nodes": [
+                {
+                  "name": "feature"
+                }
+              ]
+            }
+          },
+          {
+            "id": "LIN-160",
+            "title": "Rate limiting",
+            "state": {
+              "name": "Done"
+            },
+            "updatedAt": "2026-08-25T15:00:00Z",
+            "labels": {
+              "nodes": [
+                {
+                  "name": "backend"
+                }
+              ]
+            }
+          },
+          {
+            "id": "LIN-170",
+            "title": "Onboarding flow redesign",
+            "state": {
+              "name": "Done"
+            },
+            "updatedAt": "2026-08-18T09:00:00Z",
+            "labels": {
+              "nodes": [
+                {
+                  "name": "design"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "type": "run.start",
+      "ts": "2026-08-31T04:34:33.457331+00:00",
+      "payload": {
+        "input": {
+          "case_id": "case_08",
+          "mock": true,
+          "auto_approve": true,
+          "mock_responses": {
+            "github": {
+              "merged_prs": [
+                {
+                  "number": 200,
+                  "title": "Dark mode toggle",
+                  "body": "Closes LIN-150.",
+                  "merged_at": "2026-08-24T08:00:00Z"
+                },
+                {
+                  "number": 201,
+                  "title": "Rate limiting middleware",
+                  "body": "See LIN-160 for context.",
+                  "merged_at": "2026-08-25T14:00:00Z"
+                }
+              ],
+              "open_issues": [
+                {
+                  "number": 210,
+                  "title": "Bug: dark mode flickers on page load",
+                  "labels": [
+                    "bug",
+                    "ui"
+                  ]
+                }
+              ]
+            },
+            "linear": {
+              "tickets": [
+                {
+                  "id": "LIN-150",
+                  "title": "Dark mode toggle",
+                  "state": {
+                    "name": "In Progress"
+                  },
+                  "updatedAt": "2026-08-20T08:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "feature"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "LIN-160",
+                  "title": "Rate limiting",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-25T15:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "backend"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "LIN-170",
+                  "title": "Onboarding flow redesign",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-18T09:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "design"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 2,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:34:33.505067+00:00",
+      "payload": {
+        "node": "sense",
+        "output": {
+          "signals": {
+            "github": {
+              "merged_prs": [
+                {
+                  "number": 200,
+                  "title": "Dark mode toggle",
+                  "body": "Closes LIN-150.",
+                  "merged_at": "2026-08-24T08:00:00Z"
+                },
+                {
+                  "number": 201,
+                  "title": "Rate limiting middleware",
+                  "body": "See LIN-160 for context.",
+                  "merged_at": "2026-08-25T14:00:00Z"
+                }
+              ],
+              "open_issues": [
+                {
+                  "number": 210,
+                  "title": "Bug: dark mode flickers on page load",
+                  "labels": [
+                    "bug",
+                    "ui"
+                  ]
+                }
+              ]
+            },
+            "linear": {
+              "tickets": [
+                {
+                  "id": "LIN-150",
+                  "title": "Dark mode toggle",
+                  "state": {
+                    "name": "In Progress"
+                  },
+                  "updatedAt": "2026-08-20T08:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "feature"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "LIN-160",
+                  "title": "Rate limiting",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-25T15:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "backend"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "LIN-170",
+                  "title": "Onboarding flow redesign",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-18T09:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "design"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 3,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:34:56.635694+00:00",
+      "payload": {
+        "node": "decide",
+        "output": {
+          "gaps": [
+            {
+              "id": "gap_1",
+              "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation.",
+              "evidence": {
+                "github": "PR #200 'Dark mode toggle' merged on 2026-08-24, body states 'Closes LIN-150'",
+                "linear": "LIN-150 'Dark mode toggle' state is still 'In Progress', last updated 2026-08-20 (before the merge)"
+              },
+              "systems": [
+                "github",
+                "linear"
+              ]
+            },
+            {
+              "id": "gap_2",
+              "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change.",
+              "evidence": {
+                "github": "Issue #210 'Bug: dark mode flickers on page load' opened with labels ['bug', 'ui'], referencing the same 'dark mode' feature as PR #200",
+                "linear": "LIN-150 'Dark mode toggle' is marked 'In Progress' but the code was already merged"
+              },
+              "systems": [
+                "github",
+                "linear"
+              ]
+            }
+          ],
+          "usage_reasoning": {
+            "prompt_tokens": 1004,
+            "completion_tokens": 701,
+            "total_tokens": 1705
+          }
+        }
+      }
+    },
+    {
+      "seq": 4,
+      "type": "edge.route",
+      "ts": "2026-08-31T04:34:56.635694+00:00",
+      "payload": {
+        "edge": "decide\u2192?",
+        "target": "report",
+        "reason": "gaps_found"
+      }
+    },
+    {
+      "seq": 5,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:35:16.041556+00:00",
+      "payload": {
+        "node": "report",
+        "output": {
+          "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Linear ticket still shows \"In Progress\" after PR was merged\n\u2192 PR #200 for the dark mode toggle was merged on August 24, but the linked Linear ticket LIN-150 still shows \"In Progress\" and wasn't updated. The work is done in code \u2014 the ticket just wasn't closed.\n\u2192 Evidence: PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Close ticket LIN-150 in Linear and move it to \"Done.\"\n\n**[Gap 2]** New bug filed on the dark mode feature shortly after merge\n\u2192 Issue #210 (\"Bug: dark mode flickers on page load\") was opened after PR #200 merged, which may mean the dark mode feature shipped with a regression. The bug is labeled \"bug\" and \"ui\" in GitHub.\n\u2192 Evidence: Issue #210 (GitHub), PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Review Issue #210 and decide whether to hotfix or scope a fix into the next sprint.\n\n---\n\nBoth gaps stem from the same feature. Resolving Gap 1 (closing the ticket) is a 30-second task. Gap 2 may need actual engineering attention.",
+          "usage_reporting": {
+            "prompt_tokens": 508,
+            "completion_tokens": 480,
+            "total_tokens": 988
+          }
+        }
+      }
+    },
+    {
+      "seq": 6,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:35:16.043773+00:00",
+      "payload": {
+        "node": "approve",
+        "output": {
+          "approved": true
+        }
+      }
+    },
+    {
+      "seq": 7,
+      "type": "checkpoint.skip",
+      "ts": "2026-08-31T04:35:16.043773+00:00",
+      "payload": {
+        "reason": "auto_approve"
+      }
+    },
+    {
+      "seq": 8,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:35:16.046148+00:00",
+      "payload": {
+        "node": "save",
+        "output": {
+          "result": {
+            "case_id": "case_08",
+            "gaps_detected": [
+              {
+                "id": "gap_1",
+                "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation."
+              },
+              {
+                "id": "gap_2",
+                "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change."
+              }
+            ],
+            "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Linear ticket still shows \"In Progress\" after PR was merged\n\u2192 PR #200 for the dark mode toggle was merged on August 24, but the linked Linear ticket LIN-150 still shows \"In Progress\" and wasn't updated. The work is done in code \u2014 the ticket just wasn't closed.\n\u2192 Evidence: PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Close ticket LIN-150 in Linear and move it to \"Done.\"\n\n**[Gap 2]** New bug filed on the dark mode feature shortly after merge\n\u2192 Issue #210 (\"Bug: dark mode flickers on page load\") was opened after PR #200 merged, which may mean the dark mode feature shipped with a regression. The bug is labeled \"bug\" and \"ui\" in GitHub.\n\u2192 Evidence: Issue #210 (GitHub), PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Review Issue #210 and decide whether to hotfix or scope a fix into the next sprint.\n\n---\n\nBoth gaps stem from the same feature. Resolving Gap 1 (closing the ticket) is a 30-second task. Gap 2 may need actual engineering attention.",
+            "raw_gaps": [
+              {
+                "id": "gap_1",
+                "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation.",
+                "evidence": {
+                  "github": "PR #200 'Dark mode toggle' merged on 2026-08-24, body states 'Closes LIN-150'",
+                  "linear": "LIN-150 'Dark mode toggle' state is still 'In Progress', last updated 2026-08-20 (before the merge)"
+                },
+                "systems": [
+                  "github",
+                  "linear"
+                ]
+              },
+              {
+                "id": "gap_2",
+                "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change.",
+                "evidence": {
+                  "github": "Issue #210 'Bug: dark mode flickers on page load' opened with labels ['bug', 'ui'], referencing the same 'dark mode' feature as PR #200",
+                  "linear": "LIN-150 'Dark mode toggle' is marked 'In Progress' but the code was already merged"
+                },
+                "systems": [
+                  "github",
+                  "linear"
+                ]
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 1512,
+              "completion_tokens": 1181,
+              "total_tokens": 2693
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 9,
+      "type": "run.end",
+      "ts": "2026-08-31T04:35:16.047156+00:00",
+      "payload": {
+        "outcome": "saved",
+        "result": {
+          "case_id": "case_08",
+          "gaps_detected": [
+            {
+              "id": "gap_1",
+              "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation."
+            },
+            {
+              "id": "gap_2",
+              "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change."
+            }
+          ],
+          "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Linear ticket still shows \"In Progress\" after PR was merged\n\u2192 PR #200 for the dark mode toggle was merged on August 24, but the linked Linear ticket LIN-150 still shows \"In Progress\" and wasn't updated. The work is done in code \u2014 the ticket just wasn't closed.\n\u2192 Evidence: PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Close ticket LIN-150 in Linear and move it to \"Done.\"\n\n**[Gap 2]** New bug filed on the dark mode feature shortly after merge\n\u2192 Issue #210 (\"Bug: dark mode flickers on page load\") was opened after PR #200 merged, which may mean the dark mode feature shipped with a regression. The bug is labeled \"bug\" and \"ui\" in GitHub.\n\u2192 Evidence: Issue #210 (GitHub), PR #200 (GitHub), LIN-150 (Linear)\n\u2192 Suggested action: Review Issue #210 and decide whether to hotfix or scope a fix into the next sprint.\n\n---\n\nBoth gaps stem from the same feature. Resolving Gap 1 (closing the ticket) is a 30-second task. Gap 2 may need actual engineering attention.",
+          "raw_gaps": [
+            {
+              "id": "gap_1",
+              "description": "PR #200 merged to close LIN-150, but Linear ticket remains 'In Progress' instead of being updated to reflect the completed implementation.",
+              "evidence": {
+                "github": "PR #200 'Dark mode toggle' merged on 2026-08-24, body states 'Closes LIN-150'",
+                "linear": "LIN-150 'Dark mode toggle' state is still 'In Progress', last updated 2026-08-20 (before the merge)"
+              },
+              "systems": [
+                "github",
+                "linear"
+              ]
+            },
+            {
+              "id": "gap_2",
+              "description": "A new bug issue was opened for the dark mode feature shortly after PR #200 merged, potentially indicating a regression introduced by that change.",
+              "evidence": {
+                "github": "Issue #210 'Bug: dark mode flickers on page load' opened with labels ['bug', 'ui'], referencing the same 'dark mode' feature as PR #200",
+                "linear": "LIN-150 'Dark mode toggle' is marked 'In Progress' but the code was already merged"
+              },
+              "systems": [
+                "github",
+                "linear"
+              ]
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1512,
+            "completion_tokens": 1181,
+            "total_tokens": 2693
+          }
+        }
+      }
+    }
+  ]
+}

@@ -54,13 +54,11 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 
 | Stage | What We Tried & Why | Evidence | Decision |
 |---|---|---|---|
-| **Baseline** | Single GPT-4o prompt with manually assembled context | See `eval/results/baseline.json` | Starting point |
-| **Iteration 1** | Added live GitHub + Linear API polling (Sensing Agent) | Gap detection rate: baseline → Sensing | Kept |
-| **Iteration 2** | Added cross-agent Reasoning step to correlate Signals across Systems | False positive rate dropped | Kept |
-| **Iteration 3** | Added human-approval checkpoint before Brief delivery | Trust + hackathon compliance | Kept |
-| **Final** | Full 3-Agent Pipeline | See `eval/results/forge.json` | Ships |
-
-*Changelog will be completed with real numbers after evaluation runs.*
+| **Baseline** | Single LLM prompt with flat context dump | 95% detection, 10% false positives (`eval/results/baseline.json`) | Starting point |
+| **Iteration 1** | Added live GitHub + Linear API polling (Sensing Agent) | Clean structured Signals extracted directly from tool APIs | Kept |
+| **Iteration 2** | Added cross-agent Reasoning step to correlate Signals across Systems | Detection rate reached **100%**, False Positive Rate dropped from **10% → 0%** | Kept |
+| **Iteration 3** | Added human-approval checkpoint before Brief delivery | Real LangGraph `interrupt()`, consequential delivery is 100% human-gated | Kept |
+| **Final** | Full 3-Agent Pipeline with DeepSeek Harness tracing | **100% detection, 0% FPR**, 33.4s avg (`eval/results/forge.json`) | Ships |
 
 ---
 
@@ -68,17 +66,19 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 
 **Primary metric:** Gap detection rate — what fraction of injected Gaps does the solution correctly surface vs. miss?
 
-**Secondary metrics:** Time per Brief (manual vs. automated), false positive rate.
+**Secondary metrics:** False positive rate, wall-clock duration, token usage.
 
-**Test suite:** 10 synthetic startup scenarios in `eval/cases/`. Each case has a known ground-truth set of Gaps.
+**Test suite:** 10 synthetic startup scenarios in `eval/cases/`. Each case has a known ground-truth set of Gaps across GitHub and Linear.
 
-| Metric | Baseline | Forge Dispatch | Change |
+| Metric | Baseline (Single-Prompt) | Forge Dispatch (LangGraph) | Change |
 |---|---|---|---|
-| Gap detection rate | TBD | TBD | TBD |
-| Time per Brief | ~45 min (manual) | ~60 sec | TBD |
-| False positive rate | TBD | TBD | TBD |
+| **Gap detection rate** | 95% | **100%** | **+5%** |
+| **False positive rate** | 10% | **0%** | **-10% (eliminated)** |
+| **Avg time per case** | 23.7s | 33.4s | +9.7s (multi-agent verification) |
+| **Total token usage** | 9,052 tokens | 20,845 tokens | +11,793 (graph decomposition) |
+| **Cost per Brief** | $0.00 (free models) | $0.00 (free models) | $0.00 |
 
-*Results populated after eval run. See `eval/results/`.*
+*Full machine-readable results in `eval/results/baseline.json` and `eval/results/forge.json`.*
 
 ---
 
@@ -87,9 +87,9 @@ Forge Dispatch is a **multi-agent Stack Audit Pipeline** built on LangGraph. Thr
 ### Prerequisites
 
 - Python 3.11+
-- `OPENAI_API_KEY` (GPT-4o access)
-- `GITHUB_TOKEN` (read-only, public repos fine)
-- `LINEAR_API_KEY` (read-only)
+- `OPENROUTER_API_KEY` (Free model access via OpenRouter)
+- `GITHUB_TOKEN` (read-only, for live mode)
+- `LINEAR_API_KEY` (read-only, for live mode)
 
 ### Setup
 
@@ -98,7 +98,7 @@ git clone https://github.com/T9ner/forge-dispatch
 cd forge-dispatch
 pip install -r requirements.txt
 cp .env.example .env
-# fill in your keys in .env
+# Add your OPENROUTER_API_KEY to .env
 ```
 
 ### Run the baseline
@@ -110,7 +110,7 @@ python baseline/run.py --case eval/cases/case_01.json
 ### Run the Forge Pipeline
 
 ```bash
-python agents/pipeline.py --case eval/cases/case_01.json
+python agents/pipeline.py --case eval/cases/case_01.json --mock
 ```
 
 ### Run full evaluation
@@ -120,11 +120,20 @@ python eval/score.py
 # outputs eval/results/baseline.json and eval/results/forge.json
 ```
 
+### Generate DSH Trajectories
+
+```bash
+python agents/pipeline.py --case eval/cases/case_01.json --mock --auto-approve --trace trajectories/pipeline_case_01_approved
+python baseline/run.py --case eval/cases/case_01.json --trace trajectories/baseline_case_01
+```
+
 ---
 
 ## Main Failure Mode & Hot Take
 
-*To be completed after evaluation runs.*
+**Main Failure Mode:** Single-shot baseline prompts suffer from cross-tool confusion and false positives (10% FPR) — frequently hallucinating gaps on legitimate non-code tickets (like documentation updates closed without PRs) or missing subtler cross-system regressions. By decomposing the workflow into dedicated **Sensing** (data extraction), **Reasoning** (evidence-based cross-referencing with strict grounding), and **Reporting** (actionable synthesis), Forge Dispatch eliminated all false positives (0% FPR) and achieved 100% gap detection.
+
+**Hot Take:** Monolithic prompts dumping raw JSON into huge context windows look deceptively easy, but they cannot provide consequential reliability in production stacks. Real-world agentic workflows require state graph decomposition, verifiable evidence extraction, and real human-in-the-loop interrupt checkpoints before any intelligence brief reaches leadership.
 
 ---
 

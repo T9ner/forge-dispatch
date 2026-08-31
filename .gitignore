@@ -1,8 +1,8 @@
 # Secrets — never commit these
 .env
 
-# Generated eval results — judges reproduce these themselves
-eval/results/
+# eval/results/ is committed as submission evidence (all synthetic data).
+# Judges can regenerate it with `python eval/score.py`.
 
 # Python
 __pycache__/
@@ -24,6 +24,7 @@ ENV/
 # IDE
 .vscode/
 .idea/
+.zcode/
 *.swp
 *.swo
 

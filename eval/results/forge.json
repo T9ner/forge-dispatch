@@ -1,0 +1,256 @@
+{
+  "avg_detection_rate": 1.0,
+  "avg_false_positive_rate": 0.0,
+  "avg_duration_sec": 33.39,
+  "total_usage": {
+    "prompt_tokens": 11905,
+    "completion_tokens": 8940,
+    "total_tokens": 20845
+  },
+  "cases": [
+    {
+      "case_id": "case_01",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 27.27,
+      "usage": {
+        "prompt_tokens": 1150,
+        "completion_tokens": 913,
+        "total_tokens": 2063
+      },
+      "detected": [
+        "gap_1"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "PR #42 was merged and references LIN-55, but LIN-55 is still 'In Progress' in Linear.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_02",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 25.83,
+      "usage": {
+        "prompt_tokens": 1078,
+        "completion_tokens": 772,
+        "total_tokens": 1850
+      },
+      "detected": [
+        "gap_1"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "LIN-88 is marked Done in Linear but no merged PR exists for it in GitHub.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_03",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 32.66,
+      "usage": {
+        "prompt_tokens": 1122,
+        "completion_tokens": 953,
+        "total_tokens": 2075
+      },
+      "detected": [
+        "gap_1"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "PR #17 references LIN-999 but that ticket does not exist in Linear.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_04",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 11.27,
+      "usage": {
+        "prompt_tokens": 818,
+        "completion_tokens": 298,
+        "total_tokens": 1116
+      },
+      "detected": [],
+      "ground_truth": []
+    },
+    {
+      "case_id": "case_05",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 34.05,
+      "usage": {
+        "prompt_tokens": 1240,
+        "completion_tokens": 1072,
+        "total_tokens": 2312
+      },
+      "detected": [
+        "gap_1"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "LIN-34 (Billing module rewrite) is marked Done but GitHub has 2 open bug issues against the billing module (issues #92, #93).",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_06",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 36.9,
+      "usage": {
+        "prompt_tokens": 1270,
+        "completion_tokens": 944,
+        "total_tokens": 2214
+      },
+      "detected": [
+        "gap_1"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "Two PRs (#101 and #104) reference LIN-77 as complete, but LIN-77 is still 'In Progress' in Linear.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_07",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 10.47,
+      "usage": {
+        "prompt_tokens": 829,
+        "completion_tokens": 245,
+        "total_tokens": 1074
+      },
+      "detected": [],
+      "ground_truth": []
+    },
+    {
+      "case_id": "case_08",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 67.47,
+      "usage": {
+        "prompt_tokens": 1533,
+        "completion_tokens": 1183,
+        "total_tokens": 2716
+      },
+      "detected": [
+        "gap_1",
+        "gap_2"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "PR #200 merged for 'Dark mode toggle' (Closes LIN-150) but LIN-150 is still 'In Progress'.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        },
+        {
+          "id": "gap_2",
+          "description": "LIN-150 (Dark mode) is marked as In Progress, but GitHub issue #210 reports a bug against dark mode, suggesting the feature was shipped with known issues.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_09",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 47.31,
+      "usage": {
+        "prompt_tokens": 1436,
+        "completion_tokens": 1396,
+        "total_tokens": 2832
+      },
+      "detected": [
+        "gap_1",
+        "gap_2"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "LIN-205 is a critical bug ticket 'In Progress' in Linear but has no corresponding PR or GitHub issue \u00e2\u20ac\u201d it has been stale since Aug 15 with no visible GitHub activity.",
+          "systems": [
+            "linear"
+          ]
+        },
+        {
+          "id": "gap_2",
+          "description": "PR #302 (Refactor billing webhooks) was merged and references LIN-210, but no ticket with ID LIN-210 exists in Linear \u00e2\u20ac\u201d the reference is dangling.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case_10",
+      "detection_rate": 1.0,
+      "false_positive_rate": 0.0,
+      "duration_sec": 40.71,
+      "usage": {
+        "prompt_tokens": 1429,
+        "completion_tokens": 1164,
+        "total_tokens": 2593
+      },
+      "detected": [
+        "gap_1",
+        "gap_2"
+      ],
+      "ground_truth": [
+        {
+          "id": "gap_1",
+          "description": "LIN-300 (payment gateway migration) is marked Done and PR #400 is merged, but 2 critical payment bugs were opened on the same day (GitHub issues #410, #411), indicating a regression from this change.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        },
+        {
+          "id": "gap_2",
+          "description": "PR #405 (Clean up legacy checkout flags) was merged and references LIN-330, but no ticket with ID LIN-330 exists in Linear \u00e2\u20ac\u201d the reference is dangling.",
+          "systems": [
+            "github",
+            "linear"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "case_id": "case_06",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "LIN-77 ('Notifications system') is still marked 'In Progress' in Linear despite both PRs #101 and #104 being merged. PR #104 explicitly states 'Completes the feature,' indicating the work is done. The ticket was last updated on 2026-08-18, before either PR merged (2026-08-20 and 2026-08-22), suggesting the Linear state has not been updated to reflect completion."
+    }
+  ],
+  "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (1 total)\n\n**[Gap 1]** Notifications ticket still shows \"In Progress\" after work is done\n\n\u2192 Linear ticket LIN-77 (\"Notifications system\") is stuck in \"In Progress\" even though both PRs that complete the work have already been merged.\n\n\u2192 Evidence: PR #101 (merged 2026-08-20) and PR #104 (merged 2026-08-22 \u2014 explicitly says \"Completes the feature\"). Linear shows the ticket was last updated on 2026-08-18, two days before the first PR merged, so no one has touched the ticket since.\n\n\u2192 Suggested action: Close or mark complete LIN-77 in Linear. The work is done \u2014 just needs the ticket updated to reflect that.\n\n---",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "LIN-77 ('Notifications system') is still marked 'In Progress' in Linear despite both PRs #101 and #104 being merged. PR #104 explicitly states 'Completes the feature,' indicating the work is done. The ticket was last updated on 2026-08-18, before either PR merged (2026-08-20 and 2026-08-22), suggesting the Linear state has not been updated to reflect completion.",
+      "evidence": {
+        "github": "PR #101 (merged 2026-08-20): 'Part 1 of LIN-77'; PR #104 (merged 2026-08-22): 'Part 2 of LIN-77. Completes the feature.'",
+        "linear": "LIN-77 state: 'In Progress', updatedAt: 2026-08-18T10:00:00Z (before PRs merged)"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1270,
+    "completion_tokens": 944,
+    "total_tokens": 2214
+  }
+}

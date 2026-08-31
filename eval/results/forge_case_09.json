@@ -1,0 +1,45 @@
+{
+  "case_id": "case_09",
+  "gaps_detected": [
+    {
+      "id": "gap_1",
+      "description": "PR #302 'Refactor billing webhooks' references LIN-210 as a follow-up, but LIN-210 does not appear in the provided Linear tickets. Either the ticket ID is incorrect or the ticket was archived/deleted without updating the PR."
+    },
+    {
+      "id": "gap_2",
+      "description": "LIN-205 'CRITICAL: Data loss on concurrent writes' is marked 'In Progress' but has not been updated since 2026-08-15 (11+ days ago). Additionally, there is no corresponding PR or issue in GitHub referencing this critical bug \u2014 the work is invisible in the code system."
+    }
+  ],
+  "brief": "---\n\n## Forge Stack Brief\n\n**Date:** August 31, 2026\n**Systems scanned:** GitHub, Linear\n\n### Gaps Detected (2 total)\n\n**[Gap 1]** Ghost ticket referenced in billing PR\n\u2192 PR #302 \"Refactor billing webhooks\" points to LIN-210 as a follow-up, but no such ticket exists in Linear. Either the ID is wrong or the ticket was archived without updating the PR.\n\u2192 **Evidence:** PR #302 body references LIN-210 (merged Aug 27); LIN-210 not found in Linear\n\u2192 **Suggested action:** Verify the correct ticket ID for the billing follow-up work and update PR #302's description, or create LIN-210 if the work is still needed.\n\n**[Gap 2]** Critical bug going dark \u2014 no updates in 11 days, no code trail\n\u2192 LIN-205 (\"CRITICAL: Data loss on concurrent writes\") has been \"In Progress\" since Aug 15 with no activity since. There's also no PR or issue in GitHub linked to it, meaning the fix is invisible in the code system.\n\u2192 **Evidence:** LIN-205 last updated Aug 15; no GitHub PRs or issues reference LIN-205\n\u2192 **Suggested action:** Post an update on LIN-205 (even a quick status note), and open a GitHub issue or branch so the fix work is trackable in the code system.",
+  "raw_gaps": [
+    {
+      "id": "gap_1",
+      "description": "PR #302 'Refactor billing webhooks' references LIN-210 as a follow-up, but LIN-210 does not appear in the provided Linear tickets. Either the ticket ID is incorrect or the ticket was archived/deleted without updating the PR.",
+      "evidence": {
+        "github": "PR #302 body: 'Follow-up to LIN-210', merged 2026-08-27",
+        "linear": "No ticket with ID LIN-210 found in the provided ticket list"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    },
+    {
+      "id": "gap_2",
+      "description": "LIN-205 'CRITICAL: Data loss on concurrent writes' is marked 'In Progress' but has not been updated since 2026-08-15 (11+ days ago). Additionally, there is no corresponding PR or issue in GitHub referencing this critical bug \u2014 the work is invisible in the code system.",
+      "evidence": {
+        "github": "No PR or issue references LIN-205; no open issues present",
+        "linear": "LIN-205 state: In Progress, last updated: 2026-08-15T08:00:00Z, labels: critical + bug"
+      },
+      "systems": [
+        "github",
+        "linear"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1436,
+    "completion_tokens": 1396,
+    "total_tokens": 2832
+  }
+}

@@ -1,7 +1,7 @@
 # agents/
 
 - Purpose: Forge multi-agent Pipeline built on LangGraph. Models the Sense → Decide → Act Workflow as a directed state graph with typed state, conditional edges, and a human-approval checkpoint.
-- Ownership: `pipeline.py` (LangGraph graph definition + orchestrator), `sensing.py`, `reasoning.py`, `reporting.py`, `llm.py`
+- Ownership: `pipeline.py` (LangGraph graph definition + orchestrator), `sensing.py`, `reasoning.py`, `reporting.py`, `llm.py`, `trace.py`
 
 ## Local Contracts
 
@@ -9,7 +9,8 @@
 - Pipeline state is typed via `PipelineState(TypedDict)`. Each node reads only the fields it needs and writes its output field. No shared global state.
 - Each agent module exposes `run(context: dict) -> dict`. The pipeline nodes wrap these calls and map them to/from `PipelineState`.
 - Conditional edge after `decide`: if no gaps found, skip `report` and go straight to `save`.
-- Human-approval checkpoint is a graph node (`approve`), not a raw `input()` call in main. When `--auto-approve` is set, the node passes through without blocking.
+- Human-approval checkpoint is a graph node (`approve`) using LangGraph `interrupt()`. When `--auto-approve` is set, the node passes through and the session log records `checkpoint.skip`.
+- `trace.py` implements the DSH-inspired session log. `--trace` on `pipeline.py` writes canonical `.json` plus a markdown projection. See `trajectories/SCHEMA.md`.
 - On any System API failure, agents must raise `SystemConnectionError(system_name, original_error)`.
 
 ## Graph structure

@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "run_id": "forge-case_04-6425ce0d",
+  "started_at": "2026-08-31T04:34:04.562560+00:00",
+  "ended_at": "2026-08-31T04:34:21.069768+00:00",
+  "outcome": "saved",
+  "composition": {
+    "pipeline": "forge-dispatch",
+    "runner": "langgraph",
+    "graph": "sense \u2192 decide \u2192 (gaps?) \u2192 report \u2192 approve \u2192 (approved?) \u2192 save | END",
+    "model": "minimax/minimax-m2.7:free",
+    "provider": "openrouter",
+    "checkpoint": "MemorySaver",
+    "thread_id": "forge-case_04",
+    "mock": true,
+    "auto_approve": true
+  },
+  "input": {
+    "case_id": "case_04",
+    "mock": true,
+    "auto_approve": true,
+    "mock_responses": {
+      "github": {
+        "merged_prs": [
+          {
+            "number": 55,
+            "title": "Refactor database layer",
+            "body": "Closes LIN-12. Migrates to async connection pool.",
+            "merged_at": "2026-08-24T11:00:00Z"
+          },
+          {
+            "number": 56,
+            "title": "Update README",
+            "body": "No ticket \u00e2\u20ac\u201d docs update only.",
+            "merged_at": "2026-08-24T15:00:00Z"
+          }
+        ],
+        "open_issues": []
+      },
+      "linear": {
+        "tickets": [
+          {
+            "id": "LIN-12",
+            "title": "Refactor database layer",
+            "state": {
+              "name": "Done"
+            },
+            "updatedAt": "2026-08-24T12:00:00Z",
+            "labels": {
+              "nodes": [
+                {
+                  "name": "tech-debt"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "type": "run.start",
+      "ts": "2026-08-31T04:34:04.562560+00:00",
+      "payload": {
+        "input": {
+          "case_id": "case_04",
+          "mock": true,
+          "auto_approve": true,
+          "mock_responses": {
+            "github": {
+              "merged_prs": [
+                {
+                  "number": 55,
+                  "title": "Refactor database layer",
+                  "body": "Closes LIN-12. Migrates to async connection pool.",
+                  "merged_at": "2026-08-24T11:00:00Z"
+                },
+                {
+                  "number": 56,
+                  "title": "Update README",
+                  "body": "No ticket \u00e2\u20ac\u201d docs update only.",
+                  "merged_at": "2026-08-24T15:00:00Z"
+                }
+              ],
+              "open_issues": []
+            },
+            "linear": {
+              "tickets": [
+                {
+                  "id": "LIN-12",
+                  "title": "Refactor database layer",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-24T12:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "tech-debt"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 2,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:34:04.619802+00:00",
+      "payload": {
+        "node": "sense",
+        "output": {
+          "signals": {
+            "github": {
+              "merged_prs": [
+                {
+                  "number": 55,
+                  "title": "Refactor database layer",
+                  "body": "Closes LIN-12. Migrates to async connection pool.",
+                  "merged_at": "2026-08-24T11:00:00Z"
+                },
+                {
+                  "number": 56,
+                  "title": "Update README",
+                  "body": "No ticket \u00e2\u20ac\u201d docs update only.",
+                  "merged_at": "2026-08-24T15:00:00Z"
+                }
+              ],
+              "open_issues": []
+            },
+            "linear": {
+              "tickets": [
+                {
+                  "id": "LIN-12",
+                  "title": "Refactor database layer",
+                  "state": {
+                    "name": "Done"
+                  },
+                  "updatedAt": "2026-08-24T12:00:00Z",
+                  "labels": {
+                    "nodes": [
+                      {
+                        "name": "tech-debt"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 3,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:34:21.066265+00:00",
+      "payload": {
+        "node": "decide",
+        "output": {
+          "gaps": [],
+          "usage_reasoning": {
+            "prompt_tokens": 818,
+            "completion_tokens": 377,
+            "total_tokens": 1195
+          }
+        }
+      }
+    },
+    {
+      "seq": 4,
+      "type": "edge.route",
+      "ts": "2026-08-31T04:34:21.066265+00:00",
+      "payload": {
+        "edge": "decide\u2192?",
+        "target": "save",
+        "reason": "no_gaps"
+      }
+    },
+    {
+      "seq": 5,
+      "type": "node.complete",
+      "ts": "2026-08-31T04:34:21.069768+00:00",
+      "payload": {
+        "node": "save",
+        "output": {
+          "result": {
+            "case_id": "case_04",
+            "gaps_detected": [],
+            "brief": "No gaps detected. No brief generated.",
+            "raw_gaps": [],
+            "usage": {
+              "prompt_tokens": 818,
+              "completion_tokens": 377,
+              "total_tokens": 1195
+            }
+          }
+        }
+      }
+    },
+    {
+      "seq": 6,
+      "type": "run.end",
+      "ts": "2026-08-31T04:34:21.069768+00:00",
+      "payload": {
+        "outcome": "saved",
+        "result": {
+          "case_id": "case_04",
+          "gaps_detected": [],
+          "brief": "No gaps detected. No brief generated.",
+          "raw_gaps": [],
+          "usage": {
+            "prompt_tokens": 818,
+            "completion_tokens": 377,
+            "total_tokens": 1195
+          }
+        }
+      }
+    }
+  ]
+}

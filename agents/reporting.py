@@ -12,7 +12,7 @@ Public interface:
 
 import json
 
-from agents.llm import get_client, get_model
+from agents.llm import chat, get_client, get_model, usage_of
 
 
 SYSTEM_PROMPT = """You are Forge's reporting engine.
@@ -67,7 +67,8 @@ def run(context: dict) -> dict:
 
     prompt = SYSTEM_PROMPT.replace("{today}", today).replace("{n}", str(len(gaps)))
 
-    response = client.chat.completions.create(
+    response = chat(
+        client,
         model=get_model(),
         messages=[
             {"role": "system", "content": prompt},
@@ -80,4 +81,4 @@ def run(context: dict) -> dict:
     )
 
     brief = response.choices[0].message.content
-    return {"brief": brief}
+    return {"brief": brief, "usage": usage_of(response)}

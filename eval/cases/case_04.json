@@ -1,6 +1,6 @@
 {
   "id": "case_04",
-  "description": "Medium: Multiple PRs merged, only one creates a gap. Tests that false positives aren't introduced.",
+  "description": "Medium: Clean workflow with matching PRs and non-code documentation PR. Tests that false positives aren't introduced (no gaps).",
   "mock_responses": {
     "github": {
       "merged_prs": [
